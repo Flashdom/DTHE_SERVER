@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Index{% endblock title %}
+
+{% block content %}
+
+    {% for obj in  userdata %}
+        {% for data in obj %}
+            {% if forloop.counter == 1 %}
+                <a href="{% url 'userdata-view' data %}">
+            {% endif %}
+            {% if forloop.counter == 2 %}
+                {{data}}</a> <br>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+{% endblock content %}

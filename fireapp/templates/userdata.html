@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Userdata{% endblock title %}
+
+{% block content %}
+
+    <p>Имя: {{name}}</p>
+    <hr>
+    <p>Активность: {{sumdata}}</p>
+    <hr>
+    <p>Самые частые заметки:
+        {% for item in sumstr %}
+            '{{item}}',
+        {% endfor %}
+    </p>
+    <p>Посещаемость: {{timeset}}</p>
+    <p>Взаимодействия с пользователями: Ivan Ivanov</p>
+    <p>Количество взаимодействий с одним пользователем : 2</p>
+    <p>Количество взаимодействий с более чем одним пользователем : 1</p>
+    <p>Отзывы о пользователе : Хороший человек</p>
+
+{% endblock content %}
