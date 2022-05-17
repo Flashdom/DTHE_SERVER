@@ -1,11 +1,8 @@
-from logging import exception
 import pyrebase
 from django.shortcuts import render
 from django.views import View
-
-import re
-from collections import Counter
-from datetime import datetime, date
+import requests
+import os
 
 config = {
     "apiKey": "AIzaSyDdjxZi5Fw8qiJVcWMnawfImtnf3uMFGQM",
@@ -15,12 +12,43 @@ config = {
     "storageBucket": "dthe-980e8.appspot.com",
     "messagingSenderId": "381524571258",
     "appId": "1:381524571258:web:1ef2567a345f3806a6b7c3",
-    "measurementId": "G-WWS9MQDG5C"
+    "measurementId": "G-WWS9MQDG5C",
+    "serviceAccount": "C:/Users/arr98\PycharmProjects\pythonProject/venv/fireapp/dthe-980e8-firebase-adminsdk-iom8x-7d9a521033.json"
 }
 
 firebase = pyrebase.initialize_app(config)
 authe = firebase.auth()
 database = firebase.database()
+storage = firebase.storage()
+
+
+class MlUserData(View):
+
+    def get(self, request, uid) -> render:
+        template = 'mluserdata.html'
+        audios = storage.child("audios").child(uid)
+        data = database.child("audio").child(uid).get()
+        keys = []
+        paths = []
+        for pyre in data.pyres:
+            keys.append(pyre.key())
+        for key in keys:
+            storage.child("audios").child(uid).child(key).download(
+               path="C:/Users/arr98/PycharmProjects/pythonProject/venv/fireapp/", filename=key + ".3gp")
+            r = requests.get(storage.child("audios").child(uid).child(key).get_url(None), timeout=5)
+
+            # save response data to disk
+            if r.status_code == 200:
+                path = 'C:/Users/arr98/PycharmProjects/pythonProject/venv/fireapp/' + key
+                with open(path + ".3gp", 'wb') as f:
+                    f.write(r.content)
+                paths.append(path)
+        for path in paths:
+            os.system('ffmpeg -i' + path + '.3gp' + path +'.wav')
+        context = {
+
+        }
+        return render(request, template, context)
 
 
 class HomePage(View):
