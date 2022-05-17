@@ -34,17 +34,16 @@ class MlUserData(View):
             keys.append(pyre.key())
         for key in keys:
             storage.child("audios").child(uid).child(key).download(
-               path="C:/Users/arr98/PycharmProjects/pythonProject/venv/fireapp/", filename=key + ".3gp")
+               path="C:/Users/arr98/PycharmProjects/pythonProject/venv/fireapp/", filename=key + ".wav")
             r = requests.get(storage.child("audios").child(uid).child(key).get_url(None), timeout=5)
 
             # save response data to disk
             if r.status_code == 200:
                 path = 'C:/Users/arr98/PycharmProjects/pythonProject/venv/fireapp/' + key
-                with open(path + ".3gp", 'wb') as f:
+                with open(path + ".wav", 'wb') as f:
                     f.write(r.content)
                 paths.append(path)
-        for path in paths:
-            os.system('ffmpeg -i' + path + '.3gp' + path +'.wav')
+
         context = {
 
         }
